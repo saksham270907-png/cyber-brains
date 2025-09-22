@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Healthcare Access & Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #074dda;
+            color: #371f2d;
+            /* Added background image */
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6s29k57T-uJq-iVjWw3-u6v3Z_rV-tP3zQ&s');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
+</head>
+<body  class="bg-gray-100 antialiased flex flex-col min-h-screen">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+            <a href="#" class="text-2xl font-bold text-gray-900">
+                Healthcare Portal
+            </a>
+            <nav class="space-x-8">
+                <a href="#form-section" class="text-gray-600 hover:text-pink-600 transition-colors">Access</a>
+                <a href="#about" class="text-gray-600 hover:text-pink-600 transition-colors">About</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-8 md:py-16">
+        <section id="form-section" class="bg-white rounded-2xl shadow-lg p-8 max-w-2xl mx-auto">
+            <h1 class="text-3xl md:text-4xl font-bold text-center mb-6">Patient Information Form</h1>
+            <p class="text-center text-gray-600 mb-8">Please fill out the form below to access your healthcare services. The details you enter will be displayed after submission.</p>
+
+            <form id="patientForm" class="space-y-6">
+                <div>
+                    <label for="fullName" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors">
+                </div>
+                <div>
+                    <label for="age" class="block text-sm font-medium text-gray-700 mb-2">Age</label>
+                    <input type="number" id="age" name="age" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors">
+                </div>
+                <div>
+                    <label for="condition" class="block text-sm font-medium text-gray-700 mb-2">Reason for Visit</label>
+                    <textarea id="condition" name="condition" rows="4" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors"></textarea>
+                </div>
+                <div>
+                    <label for="hospitalAddress" class="block text-sm font-medium text-gray-700 mb-2">Hospital Address</label>
+                    <textarea id="hospitalAddress" name="hospitalAddress" rows="3" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors"></textarea>
+                </div>
+                <div>
+                    <label for="visitTime" class="block text-sm font-medium text-gray-700 mb-2">Preferred Visit Time</label>
+                    <select id="visitTime" name="visitTime" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-colors">
+                        <option value="">Select a time slot</option>
+                        <option value="9:00 AM - 10:00 AM">9:00 AM - 10:00 AM</option>
+                        <option value="10:00 AM - 11:00 AM">10:00 AM - 11:00 AM</option>
+                        <option value="11:00 AM - 12:00 PM">11:00 AM - 12:00 PM</option>
+                        <option value="2:00 PM - 3:00 PM">2:00 PM - 3:00 PM</option>
+                        <option value="3:00 PM - 4:00 PM">3:00 PM - 4:00 PM</option>
+                        <option value="4:00 PM - 5:00 PM">4:00 PM - 5:00 PM</option>
+                    </select>
+                </div>
+                <div class="flex justify-center">
+                    <button type="submit" class="w-full md:w-auto px-8 py-3 bg-pink-600 text-white font-semibold rounded-full shadow-lg hover:bg-pink-700 transition-all transform hover:scale-105">
+                        Submit Information
+                    </button>
+                </div>
+            </form>
+
+            <div id="detailsSection" class="hidden bg-gray-50 rounded-2xl p-6 mt-8">
+                <div class="flex items-center justify-center mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-500 mr-4" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                    </svg>
+                    <h2 class="text-2xl font-bold text-gray-900">Submission Successful!</h2>
+                </div>
+                <div id="submittedDetails" class="space-y-4">
+                    </div>
+                <div class="text-center mt-6">
+                    <button id="goBackBtn" class="px-6 py-2 border border-gray-300 text-gray-800 font-semibold rounded-full hover:bg-gray-200 transition-colors">
+                        Go Back
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-900 text-white py-8 mt-auto">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2024 Healthcare Portal. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('patientForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent the form from submitting normally and reloading the page
+
+            // Get form values
+            const fullName = document.getElementById('fullName').value;
+            const age = document.getElementById('age').value;
+            const condition = document.getElementById('condition').value;
+            const hospitalAddress = document.getElementById('hospitalAddress').value;  
+            const visitTime = document.getElementById('visitTime').value;
+
+            // Get the display elements
+            const formSection = document.getElementById('form-section');
+            const detailsSection = document.getElementById('detailsSection');
+            const submittedDetails = document.getElementById('submittedDetails');
+
+            // Construct the HTML to display the details
+            submittedDetails.innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-pink-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                    </svg>
+                    <p class="font-medium text-gray-700">Name: <span class="text-gray-900">${fullName}</span></p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-pink-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8.156v4.688a1 1 0 001.555.832l3.43-2.3a1 1 0 000-1.664l-3.43-2.3z" clip-rule="evenodd" />
+                    </svg>
+                    <p class="font-medium text-gray-700">Age: <span class="text-gray-900">${age}</span></p>
+                </div>
+                <div>
+                    <p class="font-medium text-gray-700 flex items-center space-x-2 mb-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-pink-500" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+                            <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 000-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" />
+                        </svg>
+                        <span>Reason for Visit:</span>
+                    </p>
+                    <p class="text-gray-900 ml-7">${condition}</p>
+                </div>
+                <div>
+                    <p class="font-medium text-gray-700 flex items-center space-x-2 mb-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-pink-500" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" />
+                        </svg>
+                        <span>Hospital Address:</span>
+                    </p>
+                    <p class="text-gray-900 ml-7">${hospitalAddress}</p>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-pink-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd" />
+                    </svg>
+                    <p class="font-medium text-gray-700">Appointment Time: <span class="text-gray-900">${visitTime}</span></p>
+                </div>
+            `;
+
+            // Hide the form and show the details section
+            document.getElementById('patientForm').classList.add('hidden');
+            detailsSection.classList.remove('hidden');
+        });
+
+        // Go back button functionality
+        document.getElementById('goBackBtn').addEventListener('click', function() {
+            document.getElementById('patientForm').classList.remove('hidden');
+            document.getElementById('detailsSection').classList.add('hidden');
+            // Reset the form fields
+            document.getElementById('patientForm').reset();
+        });
+    </script>
+
+</body>
+</html>

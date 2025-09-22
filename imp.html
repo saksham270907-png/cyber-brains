@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediCare: Your Health Partner</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        .scroll-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            cursor: pointer;
+            background-color: #10b981;
+            color: white;
+            padding: 12px;
+            border-radius: 50%;
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+        }
+        .scroll-to-top.show {
+            opacity: 1;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 24px;
+            border: 1px solid #888;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            text-align: center;
+        }
+
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #10b981;
+            animation: spin 1s ease infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Scroll to top button -->
+    <button id="scrollToTopBtn" class="scroll-to-top">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l7.5-7.5 7.5 7.5m-15 6l7.5-7.5 7.5 7.5" />
+        </svg>
+    </button>
+    
+    <!-- Modal for messages -->
+    <div id="messageModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <p id="modalMessage" class="text-lg font-semibold mb-4"></p>
+            <button id="modalOkBtn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg">OK</button>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#home" class="text-2xl font-bold text-teal-600">MediCare</a>
+            <div class="md:hidden">
+                <button id="menu-button" class="text-teal-600 focus:outline-none">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </button>
+            </div>
+            <div id="nav-links" class="hidden md:flex flex-grow justify-end items-center space-x-6 transition-all duration-300 ease-in-out">
+                <a href="#home" class="text-gray-600 hover:text-teal-600 font-medium">Home</a>
+                <a href="#about" class="text-gray-600 hover:text-teal-600 font-medium">About Us</a>
+                <a href="#services" class="text-gray-600 hover:text-teal-600 font-medium">Services</a>
+                <a href="#appointments" class="text-gray-600 hover:text-teal-600 font-medium">Appointments</a>
+                <a href="#dashboard" class="text-gray-600 hover:text-teal-600 font-medium">Dashboard</a>
+                <a href="#contact" class="text-gray-600 hover:text-teal-600 font-medium">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+
+        <!-- Hero Section -->
+        <section id="home" class="bg-teal-500 text-white rounded-xl p-8 md:p-16 mb-12 shadow-lg text-center flex flex-col md:flex-row items-center justify-center">
+            <div class="md:w-1/2 md:pr-8">
+                <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">Your Health, Our Priority</h1>
+                <p class="text-lg md:text-xl mb-6">Providing compassionate and high-quality healthcare services to our community.</p>
+                <a href="#appointments" class="inline-block bg-white text-teal-600 font-bold py-3 px-8 rounded-full shadow-lg hover:bg-gray-100 transition-colors">Book an Appointment</a>
+            </div>
+            <div class="md:w-1/2 mt-8 md:mt-0 flex justify-center">
+                <img src="https://placehold.co/400x300/e0f2fe/083344?text=Modern+Clinic" alt="Modern clinic waiting area" class="rounded-xl shadow-lg">
+            </div>
+        </section>
+
+        <!-- About Us Section -->
+        <section id="about" class="bg-white rounded-xl p-8 mb-12 shadow-lg">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="md:w-1/2 md:pr-8">
+                    <h2 class="text-3xl font-bold text-gray-800 mb-4">About Our Clinic</h2>
+                    <p class="mb-4 text-gray-600">
+                        At MediCare, we are dedicated to providing patient-centered care with a focus on prevention, wellness, and personalized treatment plans. Our team of experienced doctors and staff are committed to making your health journey as comfortable and effective as possible.
+                    </p>
+                    <p class="text-gray-600">
+                        We use the latest medical technology and follow evidence-based practices to ensure you receive the best possible care. Your well-being is our greatest success.
+                    </p>
+                </div>
+                <div class="md:w-1/2 mt-8 md:mt-0 flex justify-center">
+                    <img src="https://placehold.co/400x300/d1fae5/065f46?text=Team+of+Doctors" alt="Medical team" class="rounded-xl shadow-lg">
+                </div>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section id="services" class="bg-white rounded-xl p-8 mb-12 shadow-lg">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Our Services</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Service Card 1 -->
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <h3 class="text-xl font-semibold text-teal-600 mb-2">General Check-ups</h3>
+                    <p class="text-gray-600">Routine health check-ups and preventative care to keep you healthy.</p>
+                </div>
+                <!-- Service Card 2 -->
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <h3 class="text-xl font-semibold text-teal-600 mb-2">Pediatric Care</h3>
+                    <p class="text-gray-600">Compassionate and specialized care for infants, children, and adolescents.</p>
+                </div>
+                <!-- Service Card 3 -->
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <h3 class="text-xl font-semibold text-teal-600 mb-2">Emergency Services</h3>
+                    <p class="text-gray-600">24/7 emergency services for immediate medical attention.</p>
+                </div>
+                <!-- Service Card 4 -->
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <h3 class="text-xl font-semibold text-teal-600 mb-2">Dermatology</h3>
+                    <p class="text-gray-600">Expert care for all your skin-related concerns.</p>
+                </div>
+                <!-- Service Card 5 -->
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <h3 class="text-xl font-semibold text-teal-600 mb-2">Cardiology</h3>
+                    <p class="text-gray-600">Advanced diagnostic and treatment for heart conditions.</p>
+                </div>
+                <!-- Service Card 6 -->
+                <div class="bg-gray-50 p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300">
+                    <h3 class="text-xl font-semibold text-teal-600 mb-2">Orthopedics</h3>
+                    <p class="text-gray-600">Specialized treatment for bone and joint injuries and conditions.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Appointments Section -->
+        <section id="appointments" class="bg-white rounded-xl p-8 mb-12 shadow-lg">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Book an Appointment</h2>
+            <div id="appointment-form-container" class="max-w-xl mx-auto">
+                <form id="appointment-form" class="space-y-6">
+                    <div>
+                        <label for="patientName" class="block text-sm font-medium text-gray-700">Patient Name</label>
+                        <input type="text" id="patientName" name="patientName" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2">
+                    </div>
+                    <div>
+                        <label for="doctor" class="block text-sm font-medium text-gray-700">Select Doctor</label>
+                        <select id="doctor" name="doctor" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2">
+                            <option value="Dr. Jane Smith">Dr. Jane Smith (General)</option>
+                            <option value="Dr. Alex Chen">Dr. Alex Chen (Pediatrics)</option>
+                            <option value="Dr. Emily White">Dr. Emily White (Dermatology)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="appointmentDate" class="block text-sm font-medium text-gray-700">Date</label>
+                        <input type="date" id="appointmentDate" name="appointmentDate" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2">
+                    </div>
+                    <div>
+                        <label for="appointmentTime" class="block text-sm font-medium text-gray-700">Time</label>
+                        <input type="time" id="appointmentTime" name="appointmentTime" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2">
+                    </div>
+                    <div>
+                        <label for="reason" class="block text-sm font-medium text-gray-700">Reason for Visit</label>
+                        <textarea id="reason" name="reason" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-teal-500 focus:ring-teal-500 p-2"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-teal-600 text-white py-2 px-4 rounded-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 transition-colors duration-300">
+                        Book Now
+                    </button>
+                    <div id="loading-spinner" class="spinner mx-auto hidden"></div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Patient Dashboard Section -->
+        <section id="dashboard" class="bg-white rounded-xl p-8 mb-12 shadow-lg">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Patient Dashboard</h2>
+            <div id="auth-status" class="text-sm text-center text-gray-500 mb-4">
+                Authenticating...
+            </div>
+            <div id="user-info" class="text-sm text-center text-gray-600 mb-4 hidden">
+                <p>Welcome! Your user ID is: <span id="user-id" class="font-bold text-teal-600 break-all"></span></p>
+                <p class="text-xs mt-2">This ID is used for your appointments. Share it with others to view your shared data in this app.</p>
+            </div>
+            
+            <h3 class="text-2xl font-semibold text-gray-800 mb-4">Your Appointments</h3>
+            <div id="user-appointments-list" class="space-y-4">
+                <!-- User's appointments will be dynamically loaded here -->
+                <p class="text-center text-gray-500" id="user-appointments-placeholder">No appointments booked yet.</p>
+            </div>
+            
+            <h3 class="text-2xl font-semibold text-gray-800 mt-8 mb-4">All Appointments (Multi-user View)</h3>
+            <div id="all-appointments-list" class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 rounded-lg shadow-sm">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tl-lg">Patient</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Doctor</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider rounded-tr-lg">Reason</th>
+                        </tr>
+                    </thead>
+                    <tbody id="all-appointments-table-body" class="bg-white divide-y divide-gray-200">
+                        <!-- Appointments will be dynamically loaded here -->
+                        <tr>
+                            <td colspan="5" class="px-6 py-4 whitespace-nowrap text-center text-gray-500" id="all-appointments-placeholder">Loading appointments...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="bg-white rounded-xl p-8 shadow-lg">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-8">Contact Us</h2>
+            <div class="max-w-xl mx-auto space-y-4 text-center">
+                <p class="text-gray-600">
+                    For any questions or concerns, please feel free to reach out to us.
+                </p>
+                <p class="text-gray-600">
+                    <strong>Email:</strong> <a href="mailto:info@medicare.com" class="text-teal-600 hover:underline">info@medicare.com</a><br>
+                    <strong>Phone:</strong> <a href="tel:+1234567890" class="text-teal-600 hover:underline">+1 (234) 567-890</a>
+                </p>
+                <div class="flex justify-center space-x-4 mt-6">
+                    <a href="https://twitter.com" target="_blank" class="text-teal-600 hover:text-teal-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter">
+                            <path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path>
+                        </svg>
+                    </a>
+                    <a href="https://facebook.com" target="_blank" class="text-teal-600 hover:text-teal-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook">
+                            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                        </svg>
+                    </a>
+                    <a href="https://instagram.com" target="_blank" class="text-teal-600 hover:text-teal-800">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram">
+                            <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                            <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                            <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2025 MediCare. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Firebase SDKs via CDN -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, addDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, where, getDocs, setLogLevel, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase-provided global variables
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+        // NOTE: If running this outside of a Firebase-enabled environment,
+        // you must paste your own firebaseConfig object here.
+        // Replace this line:
+        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        // with your configuration, like this:
+        // const firebaseConfig = {
+        //   apiKey: "YOUR_API_KEY",
+        //   authDomain: "YOUR_AUTH_DOMAIN",
+        //   projectId: "YOUR_PROJECT_ID",
+        //   storageBucket: "YOUR_STORAGE_BUCKET",
+        //   messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        //   appId: "YOUR_APP_ID"
+        // };
+
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // --- Firebase Setup ---
+        let db, auth;
+        let userId;
+
+        setLogLevel('debug');
+
+        try {
+            const app = initializeApp(firebaseConfig);
+            db = getFirestore(app);
+            auth = getAuth(app);
+            
+            const authStatusEl = document.getElementById('auth-status');
+            const userInfoEl = document.getElementById('user-info');
+            const userIdEl = document.getElementById('user-id');
+
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    userId = user.uid;
+                    authStatusEl.textContent = 'Authentication successful!';
+                    userInfoEl.classList.remove('hidden');
+                    userIdEl.textContent = userId;
+                    fetchAppointments();
+                } else {
+                    if (initialAuthToken) {
+                        await signInWithCustomToken(auth, initialAuthToken).catch(error => {
+                            console.error("Custom token sign-in failed:", error);
+                            showModal('Failed to authenticate. Please try again.');
+                            authStatusEl.textContent = 'Authentication failed.';
+                            signInAnonymously(auth); // Fallback to anonymous
+                        });
+                    } else {
+                         await signInAnonymously(auth).catch(error => {
+                            console.error("Anonymous sign-in failed:", error);
+                            showModal('Failed to sign in anonymously.');
+                            authStatusEl.textContent = 'Authentication failed.';
+                        });
+                    }
+                }
+            });
+        } catch (error) {
+            console.error("Firebase initialization error:", error);
+            showModal('Failed to initialize the app. Please check the console for details.');
+        }
+
+        // --- UI Logic ---
+        const navLinks = document.getElementById('nav-links');
+        const menuButton = document.getElementById('menu-button');
+
+        menuButton.addEventListener('click', () => {
+            navLinks.classList.toggle('hidden');
+            navLinks.classList.toggle('flex');
+            navLinks.classList.toggle('flex-col');
+            navLinks.classList.toggle('space-x-6');
+            navLinks.classList.toggle('space-y-4');
+        });
+
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+                if (window.innerWidth < 768) {
+                    navLinks.classList.add('hidden');
+                }
+            });
+        });
+
+        // Modal functions
+        const messageModal = document.getElementById('messageModal');
+        const modalMessage = document.getElementById('modalMessage');
+        const closeBtn = document.querySelector('.close-btn');
+        const modalOkBtn = document.getElementById('modalOkBtn');
+        const loadingSpinner = document.getElementById('loading-spinner');
+
+        function showModal(message) {
+            modalMessage.textContent = message;
+            messageModal.style.display = 'block';
+        }
+
+        closeBtn.onclick = () => {
+            messageModal.style.display = 'none';
+        }
+        modalOkBtn.onclick = () => {
+            messageModal.style.display = 'none';
+        }
+        window.onclick = (event) => {
+            if (event.target == messageModal) {
+                messageModal.style.display = 'none';
+            }
+        }
+        
+        // Confirmation modal for deletions
+        const confirmModal = document.getElementById('confirmModal');
+        const confirmYesBtn = document.getElementById('confirmYesBtn');
+        const confirmNoBtn = document.getElementById('confirmNoBtn');
+
+        function showConfirmModal(message, onConfirm, onCancel) {
+            document.getElementById('confirmMessage').textContent = message;
+            document.getElementById('confirmModal').style.display = 'block';
+
+            confirmYesBtn.onclick = () => {
+                document.getElementById('confirmModal').style.display = 'none';
+                if (onConfirm) onConfirm();
+            };
+
+            confirmNoBtn.onclick = () => {
+                document.getElementById('confirmModal').style.display = 'none';
+                if (onCancel) onCancel();
+            };
+        }
+
+
+        // Scroll-to-top button logic
+        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+        window.onscroll = () => {
+            if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                scrollToTopBtn.classList.add('show');
+            } else {
+                scrollToTopBtn.classList.remove('show');
+            }
+        };
+
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // --- Appointment Logic ---
+        const appointmentForm = document.getElementById('appointment-form');
+        const userAppointmentsList = document.getElementById('user-appointments-list');
+        const userAppointmentsPlaceholder = document.getElementById('user-appointments-placeholder');
+        const allAppointmentsTableBody = document.getElementById('all-appointments-table-body');
+        const allAppointmentsPlaceholder = document.getElementById('all-appointments-placeholder');
+
+        appointmentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            loadingSpinner.classList.remove('hidden');
+
+            const patientName = document.getElementById('patientName').value;
+            const doctor = document.getElementById('doctor').value;
+            const appointmentDate = document.getElementById('appointmentDate').value;
+            const appointmentTime = document.getElementById('appointmentTime').value;
+            const reason = document.getElementById('reason').value;
+
+            if (!userId) {
+                showModal("User is not authenticated. Please try refreshing the page.");
+                loadingSpinner.classList.add('hidden');
+                return;
+            }
+
+            const appointmentData = {
+                patientName,
+                doctor,
+                appointmentDate,
+                appointmentTime,
+                reason,
+                userId: userId,
+                createdAt: serverTimestamp() // Use server-side timestamp
+            };
+
+            try {
+                // Save to public collection for multi-user view
+                await addDoc(collection(db, artifacts/${appId}/public/data/appointments), appointmentData);
+                
+                showModal('Appointment booked successfully!');
+                appointmentForm.reset();
+            } catch (e) {
+                console.error("Error adding document: ", e);
+                showModal("Error booking appointment. Please try again.");
+            } finally {
+                loadingSpinner.classList.add('hidden');
+            }
+        });
+
+        function fetchAppointments() {
+             // Listener for all appointments (Public view)
+            onSnapshot(collection(db, artifacts/${appId}/public/data/appointments), (snapshot) => {
+                const allAppointments = [];
+                snapshot.forEach((doc) => {
+                    allAppointments.push({ id: doc.id, ...doc.data() });
+                });
+                
+                // Sort appointments by date and time
+                allAppointments.sort((a, b) => {
+                    const dateA = new Date(${a.appointmentDate}T${a.appointmentTime});
+                    const dateB = new Date(${b.appointmentDate}T${b.appointmentTime});
+                    return dateA - dateB;
+                });
+
+                renderAllAppointments(allAppointments);
+                renderUserAppointments(allAppointments);
+            }, (error) => {
+                console.error("Error fetching all appointments: ", error);
+                allAppointmentsPlaceholder.textContent = 'Error loading appointments.';
+            });
+        }
+        
+        // Deletion logic
+        async function deleteAppointment(docId, button) {
+            button.disabled = true;
+            button.textContent = 'Deleting...';
+            try {
+                await deleteDoc(doc(db, artifacts/${appId}/public/data/appointments, docId));
+                showModal('Appointment deleted successfully!');
+            } catch (e) {
+                console.error("Error deleting document: ", e);
+                showModal('Error deleting appointment.');
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Delete';
+            }
+        }
+        
+        userAppointmentsList.addEventListener('click', (e) => {
+            if (e.target.classList.contains('delete-btn')) {
+                const docId = e.target.getAttribute('data-id');
+                showConfirmModal("Are you sure you want to delete this appointment?", () => {
+                    deleteAppointment(docId, e.target);
+                });
+            }
+        });
+
+        function renderUserAppointments(allAppointments) {
+            const userAppts = allAppointments.filter(appt => appt.userId === userId);
+            
+            if (userAppts.length === 0) {
+                userAppointmentsPlaceholder.classList.remove('hidden');
+            } else {
+                userAppointmentsPlaceholder.classList.add('hidden');
+            }
+            
+            userAppointmentsList.innerHTML = userAppts.map(appt => `
+                <div class="bg-gray-50 p-4 rounded-lg shadow-sm border border-gray-200">
+                    <p class="font-bold text-lg text-teal-700">Dr. ${appt.doctor}</p>
+                    <p class="text-gray-600"><strong>Patient:</strong> ${appt.patientName}</p>
+                    <p class="text-gray-600"><strong>Date:</strong> ${new Date(appt.appointmentDate).toLocaleDateString()}</p>
+                    <p class="text-gray-600"><strong>Time:</strong> ${appt.appointmentTime}</p>
+                    <p class="text-gray-600"><strong>Reason:</strong> ${appt.reason}</p>
+                    <button class="mt-4 w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg delete-btn" data-id="${appt.id}">
+                        Delete
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function renderAllAppointments(appointments) {
+            if (appointments.length === 0) {
+                allAppointmentsPlaceholder.textContent = 'No appointments booked yet.';
+                allAppointmentsPlaceholder.parentElement.classList.remove('hidden');
+            } else {
+                allAppointmentsPlaceholder.parentElement.classList.add('hidden');
+            }
+
+            allAppointmentsTableBody.innerHTML = appointments.map(appt => `
+                <tr class="hover:bg-gray-100">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${appt.patientName}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${appt.doctor}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${new Date(appt.appointmentDate).toLocaleDateString()}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${appt.appointmentTime}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${appt.reason}</td>
+                </tr>
+            `).join('');
+        }
+    </script>
+</body>
+
+</html>
